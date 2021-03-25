@@ -8,19 +8,27 @@ import java.util.function.Predicate;
 
 public class Criteria {
     private Category category;
-    private Integer limit;
-    private SortOrder heightOrder;
-    private SortOrder nameOrder;
-    private Float maxHeight;
-    private Float minHeight;
+    private Optional<Integer> limit;
+    private Optional<SortOrder> heightOrder;
+    private Optional<SortOrder> nameOrder;
+    private Optional<Float> maxHeight;
+    private Optional<Float> minHeight;
 
     public Criteria(Category category, Integer limit, SortOrder heightOrder, SortOrder nameOrder, Float maxHeight, Float minHeight) {
         this.category = category;
-        this.limit = limit;
-        this.heightOrder = heightOrder;
-        this.nameOrder = nameOrder;
-        this.maxHeight = maxHeight;
-        this.minHeight = minHeight;
+        this.limit = Optional.ofNullable(limit);
+        this.heightOrder = Optional.ofNullable(heightOrder);
+        this.nameOrder = Optional.ofNullable(nameOrder);
+        this.maxHeight = Optional.ofNullable(maxHeight);
+        this.minHeight = Optional.ofNullable(minHeight);
+    }
+
+    public Criteria() {
+        limit = Optional.empty();
+        heightOrder = Optional.empty();
+        nameOrder = Optional.empty();
+        minHeight = Optional.empty();
+        maxHeight = Optional.empty();
     }
 
     public Predicate<Munro> buildFilters(){
@@ -32,14 +40,14 @@ public class Criteria {
         }else{
             categoryPred = f -> f.getHillCategory() == Category.MUN || f.getHillCategory() == Category.TOP;
         }
-        if(maxHeight != null){
-            heightFilter = f -> f.getHeight() < maxHeight;
+        if(maxHeight.isPresent()){
+            heightFilter = f -> f.getHeight() < maxHeight.get();
         }
-        if (minHeight != null) {
-            heightFilter = f -> f.getHeight() > minHeight;
+        if (minHeight.isPresent()) {
+            heightFilter = f -> f.getHeight() > minHeight.get();
         }
-        if(maxHeight != null && minHeight != null){
-            heightFilter = f -> f.getHeight() > minHeight && f.getHeight() < maxHeight;
+        if(maxHeight.isPresent() && minHeight.isPresent()){
+            heightFilter = f -> f.getHeight() > minHeight.get() && f.getHeight() < maxHeight.get();
         }
 
         if(heightFilter != null){
@@ -50,27 +58,27 @@ public class Criteria {
 
     public Optional<Comparator<Munro>> buildComparator(){
         Comparator<Munro> comparator = null;
-        if(nameOrder != null){
-            if(nameOrder == SortOrder.ASC){
+        if(nameOrder.isPresent()){
+            if(nameOrder.get() == SortOrder.ASC){
                 comparator = Comparator.comparing(Munro::getName);
             }else{
                 comparator = Comparator.comparing(Munro::getName).reversed();
             }
         }
-        if(heightOrder != null){
-            if(heightOrder == SortOrder.ASC){
+        if(heightOrder.isPresent()){
+            if(heightOrder.get() == SortOrder.ASC){
                 comparator = Comparator.comparing(Munro::getHeight);
             }else{
                 comparator = Comparator.comparing(Munro::getHeight).reversed();
             }
         }
-        if(heightOrder != null && nameOrder != null){
-            if(nameOrder == SortOrder.ASC){
+        if(heightOrder.isPresent() && nameOrder.isPresent()){
+            if(nameOrder.get() == SortOrder.ASC){
                 comparator = Comparator.comparing(Munro::getName);
             }else{
                 comparator = Comparator.comparing(Munro::getName).reversed();
             }
-            if(heightOrder == SortOrder.ASC){
+            if(heightOrder.get() == SortOrder.ASC){
                 comparator = comparator.thenComparing(Munro::getHeight);
             }else{
                 Comparator<Munro> temp = Comparator.comparing(Munro::getHeight).reversed();
@@ -88,43 +96,43 @@ public class Criteria {
         this.category = category;
     }
 
-    public int getLimit() {
+    public Optional<Integer> getLimit() {
         return limit;
     }
 
-    public void setLimit(int limit) {
+    public void setLimit(Optional<Integer> limit) {
         this.limit = limit;
     }
 
-    public SortOrder getHeightOrder() {
+    public Optional<SortOrder> getHeightOrder() {
         return heightOrder;
     }
 
-    public void setHeightOrder(SortOrder heightOrder) {
+    public void setHeightOrder(Optional<SortOrder> heightOrder) {
         this.heightOrder = heightOrder;
     }
 
-    public SortOrder getNameOrder() {
+    public Optional<SortOrder> getNameOrder() {
         return nameOrder;
     }
 
-    public void setNameOrder(SortOrder nameOrder) {
+    public void setNameOrder(Optional<SortOrder> nameOrder) {
         this.nameOrder = nameOrder;
     }
 
-    public Float getMaxHeight() {
+    public Optional<Float> getMaxHeight() {
         return maxHeight;
     }
 
-    public void setMaxHeight(Float maxHeight) {
+    public void setMaxHeight(Optional<Float> maxHeight) {
         this.maxHeight = maxHeight;
     }
 
-    public Float getMinHeight() {
+    public Optional<Float> getMinHeight() {
         return minHeight;
     }
 
-    public void setMinHeight(Float minHeight) {
+    public void setMinHeight(Optional<Float> minHeight) {
         this.minHeight = minHeight;
     }
 }
