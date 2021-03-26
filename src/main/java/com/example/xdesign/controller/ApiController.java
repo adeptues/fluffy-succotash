@@ -1,5 +1,10 @@
 package com.example.xdesign.controller;
 
+import com.example.xdesign.model.Category;
+import com.example.xdesign.model.Munro;
+import com.example.xdesign.model.SortOrder;
+import com.example.xdesign.service.Criteria;
+import com.example.xdesign.service.MunroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -7,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;

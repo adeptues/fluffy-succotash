@@ -1,14 +1,13 @@
 package com.example.xdesign;
 
-import com.example.xdesign.controller.Category;
-import com.example.xdesign.controller.Munro;
-import com.example.xdesign.controller.MunroService;
+import com.example.xdesign.model.Category;
+import com.example.xdesign.model.Munro;
+import com.example.xdesign.service.MunroService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.LinkedList;

@@ -1,4 +1,6 @@
-package com.example.xdesign.controller;
+package com.example.xdesign.model;
+
+import com.example.xdesign.model.Category;
 
 public class Munro {
 

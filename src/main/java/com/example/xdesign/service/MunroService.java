@@ -1,4 +1,7 @@
-package com.example.xdesign.controller;
+package com.example.xdesign.service;
+
+import com.example.xdesign.model.Munro;
+import com.example.xdesign.service.Criteria;
 
 import java.util.List;
 import java.util.stream.Collectors;
