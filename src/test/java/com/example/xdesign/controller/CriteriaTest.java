@@ -6,10 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.TestExecutionListeners;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -84,57 +81,78 @@ class CriteriaTest {
     }
 
     @Test
-    void buildComparators(){
+    void buildComparators() {
         Criteria criteria = new Criteria(Category.EITHER, null, SortOrder.ASC, null, null, null);
         Optional<Comparator<Munro>> comparator = criteria.buildComparator();
         assertTrue(comparator.isPresent());
         munros.sort(comparator.get());
-        assertEquals(munros.get(0).getHeight(),101f);
-        assertEquals(munros.get(1).getHeight(),101f);
-        assertEquals(munros.get(2).getHeight(),102f);
+        assertEquals(munros.get(0).getHeight(), 101f);
+        assertEquals(munros.get(1).getHeight(), 101f);
+        assertEquals(munros.get(2).getHeight(), 102f);
     }
 
     @Test
-    void buildComparatorsHeightDSC(){
+    void buildComparatorsHeightDSC() {
         Criteria criteria = new Criteria(Category.EITHER, null, SortOrder.DESC, null, null, null);
         Optional<Comparator<Munro>> comparator = criteria.buildComparator();
         assertTrue(comparator.isPresent());
         munros.sort(comparator.get());
-        assertEquals(munros.get(0).getHeight(),109f);
-        assertEquals(munros.get(1).getHeight(),108f);
-        assertEquals(munros.get(2).getHeight(),107f);
+        assertEquals(munros.get(0).getHeight(), 109f);
+        assertEquals(munros.get(1).getHeight(), 108f);
+        assertEquals(munros.get(2).getHeight(), 107f);
     }
 
     @Test
-    void buildComparatorsNameASC(){
+    void buildComparatorsNameASC() {
         Criteria criteria = new Criteria(Category.EITHER, null, null, SortOrder.ASC, null, null);
         Optional<Comparator<Munro>> comparator = criteria.buildComparator();
         assertTrue(comparator.isPresent());
         munros.sort(comparator.get());
-        assertEquals(munros.get(0).getName(),"alpha");
-        assertEquals(munros.get(1).getName(),"blpha");
-        assertEquals(munros.get(2).getName(),"clpha");
+        assertEquals(munros.get(0).getName(), "alpha");
+        assertEquals(munros.get(1).getName(), "blpha");
+        assertEquals(munros.get(2).getName(), "clpha");
     }
 
     @Test
-    void buildComparatorsNameDSC(){
+    void buildComparatorsNameDSC() {
         Criteria criteria = new Criteria(Category.EITHER, null, null, SortOrder.DESC, null, null);
         Optional<Comparator<Munro>> comparator = criteria.buildComparator();
         assertTrue(comparator.isPresent());
         munros.sort(comparator.get());
-        assertEquals(munros.get(0).getName(),"jlpha");
-        assertEquals(munros.get(1).getName(),"ilpha");
-        assertEquals(munros.get(2).getName(),"hlpha");
+        assertEquals(munros.get(0).getName(), "jlpha");
+        assertEquals(munros.get(1).getName(), "ilpha");
+        assertEquals(munros.get(2).getName(), "hlpha");
     }
 
     @Test
-    void buildComparatorsCombination(){
-        Criteria criteria = new Criteria(Category.EITHER, null, SortOrder.DESC, SortOrder.ASC, null, null);
+    void buildComparatorsCombination() {
+        Munro munro = new Munro("Bob", 101.0f, "gridref", Category.MUN);
+        Munro munro1 = new Munro("Bob", 102.0f, "gridref", Category.TOP);
+        Munro munro2 = new Munro("Tom", 107.0f, "gridref", Category.MUN);
+        Munro munro3 = new Munro("Tom", 103.0f, "gridref", Category.TOP);
+        Munro munro4 = new Munro("Toma", 103.0f, "gridref", Category.TOP);
+        munros.clear();
+        munros.add(munro);
+        munros.add(munro1);
+        munros.add(munro2);
+        munros.add(munro4);
+        munros.add(munro3);
+        Criteria criteria = new Criteria(Category.EITHER, null, SortOrder.ASC, SortOrder.ASC, null, null);
         Optional<Comparator<Munro>> comparator = criteria.buildComparator();
         assertTrue(comparator.isPresent());
-        munros.sort(comparator.get());
-        assertEquals(munros.get(0).getName(),"alpha");
-        assertEquals(munros.get(1).getName(),"jlpha");
-        assertEquals(munros.get(2).getName(),"blpha");
+
+        Collections.sort(munros, comparator.get());
+        assertEquals("Bob", munros.get(0).getName());
+        assertEquals(101f, munros.get(0).getHeight());
+        assertEquals("Bob", munros.get(1).getName());
+        assertEquals(102f, munros.get(1).getHeight());
+        assertEquals("Tom", munros.get(2).getName());
+        assertEquals(103f, munros.get(2).getHeight());
+        assertEquals("Toma", munros.get(3).getName());
+        assertEquals(103f, munros.get(3).getHeight());
+        assertEquals("Tom", munros.get(4).getName());
+        assertEquals(107f, munros.get(4).getHeight());
+
+
     }
 }

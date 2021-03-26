@@ -73,18 +73,19 @@ public class Criteria {
             }
         }
         if(heightOrder.isPresent() && nameOrder.isPresent()){
+            Comparator<Munro> primary = null;
+            Comparator<Munro> secondary = null;
             if(nameOrder.get() == SortOrder.ASC){
-                comparator = Comparator.comparing(Munro::getName);
+                primary = Comparator.comparing(Munro::getName);
             }else{
-                comparator = Comparator.comparing(Munro::getName).reversed();
+                primary = Comparator.comparing(Munro::getName).reversed();
             }
             if(heightOrder.get() == SortOrder.ASC){
-                comparator = comparator.thenComparing(Munro::getHeight);
+                secondary = comparator.thenComparing(Munro::getHeight);
             }else{
-                Comparator<Munro> temp = Comparator.comparing(Munro::getHeight).reversed();
-                comparator = comparator.thenComparing(temp);
+                secondary = Comparator.comparing(Munro::getHeight).reversed();
             }
-
+            comparator = secondary.thenComparing(primary);
         }
         return Optional.ofNullable(comparator);
     }
