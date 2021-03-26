@@ -38,8 +38,10 @@ class MunroServiceTest {
 
     @Test
     void filterApplyLimit() {
-
-        Criteria criteria = new Criteria(Category.EITHER, 5, SortOrder.ASC, SortOrder.ASC, 108f, 101f);
+        List<SortOrder> sortOrder = new LinkedList<SortOrder>();
+        sortOrder.add(SortOrder.NAMEASC);
+        sortOrder.add(SortOrder.HEIGHTASC);
+        Criteria criteria = new Criteria(Category.EITHER, 5, sortOrder, 108f, 101f);
         MunroService munroService = new MunroService(munros);
         List<Munro> filtered = munroService.filter(criteria);
         assertEquals(5,filtered.size());

@@ -49,7 +49,8 @@ class CriteriaTest {
 
     @Test
     void buildFilters() {
-        Criteria criteria = new Criteria(Category.EITHER, null, null, null, null, null);
+        Criteria criteria = new Criteria();
+        criteria.setCategory(Category.EITHER);
         Predicate<Munro> filter = criteria.buildFilters();
         List<Munro> actual = munros.stream().filter(filter).collect(Collectors.toList());
         assertEquals(munros, actual);
@@ -58,7 +59,7 @@ class CriteriaTest {
 
     @Test
     void buildFiltersWithTwoCriteria() {
-        Criteria criteria = new Criteria(Category.EITHER, null, null, null, 105f, null);
+        Criteria criteria = new Criteria(Category.EITHER, null, null, 105f, null);
         Predicate<Munro> filter = criteria.buildFilters();
         List<Munro> actual = munros.stream().filter(filter).collect(Collectors.toList());
         assertEquals(5, actual.size());
@@ -66,7 +67,7 @@ class CriteriaTest {
 
     @Test
     void buildFiltersWithHeightRange() {
-        Criteria criteria = new Criteria(Category.EITHER, null, null, null, 107f, 102f);
+        Criteria criteria = new Criteria(Category.EITHER, null, null, 107f, 102f);
         Predicate<Munro> filter = criteria.buildFilters();
         List<Munro> actual = munros.stream().filter(filter).collect(Collectors.toList());
         assertEquals(4, actual.size());
@@ -74,7 +75,7 @@ class CriteriaTest {
 
     @Test
     void buildFiltersWithHeightRange2() {
-        Criteria criteria = new Criteria(Category.TOP, null, null, null, 107f, 102f);
+        Criteria criteria = new Criteria(Category.TOP, null, null, 107f, 102f);
         Predicate<Munro> filter = criteria.buildFilters();
         List<Munro> actual = munros.stream().filter(filter).collect(Collectors.toList());
         assertEquals(2, actual.size());
@@ -82,7 +83,10 @@ class CriteriaTest {
 
     @Test
     void buildComparators() {
-        Criteria criteria = new Criteria(Category.EITHER, null, SortOrder.ASC, null, null, null);
+        List<SortOrder> sortOrder = new LinkedList<SortOrder>();
+        sortOrder.add(SortOrder.HEIGHTASC);
+
+        Criteria criteria = new Criteria(Category.EITHER, null, sortOrder, null, null);
         Optional<Comparator<Munro>> comparator = criteria.buildComparator();
         assertTrue(comparator.isPresent());
         munros.sort(comparator.get());
@@ -93,7 +97,9 @@ class CriteriaTest {
 
     @Test
     void buildComparatorsHeightDSC() {
-        Criteria criteria = new Criteria(Category.EITHER, null, SortOrder.DESC, null, null, null);
+        List<SortOrder> sortOrder = new LinkedList<SortOrder>();
+        sortOrder.add(SortOrder.HEIGHTDSC);
+        Criteria criteria = new Criteria(Category.EITHER, null, sortOrder, null, null);
         Optional<Comparator<Munro>> comparator = criteria.buildComparator();
         assertTrue(comparator.isPresent());
         munros.sort(comparator.get());
@@ -104,7 +110,9 @@ class CriteriaTest {
 
     @Test
     void buildComparatorsNameASC() {
-        Criteria criteria = new Criteria(Category.EITHER, null, null, SortOrder.ASC, null, null);
+        List<SortOrder> sortOrder = new LinkedList<SortOrder>();
+        sortOrder.add(SortOrder.NAMEASC);
+        Criteria criteria = new Criteria(Category.EITHER, null, sortOrder, null, null);
         Optional<Comparator<Munro>> comparator = criteria.buildComparator();
         assertTrue(comparator.isPresent());
         munros.sort(comparator.get());
@@ -115,7 +123,9 @@ class CriteriaTest {
 
     @Test
     void buildComparatorsNameDSC() {
-        Criteria criteria = new Criteria(Category.EITHER, null, null, SortOrder.DESC, null, null);
+        List<SortOrder> sortOrder = new LinkedList<SortOrder>();
+        sortOrder.add(SortOrder.NAMEDSC);
+        Criteria criteria = new Criteria(Category.EITHER, null, sortOrder, null, null);
         Optional<Comparator<Munro>> comparator = criteria.buildComparator();
         assertTrue(comparator.isPresent());
         munros.sort(comparator.get());
@@ -137,7 +147,10 @@ class CriteriaTest {
         munros.add(munro2);
         munros.add(munro4);
         munros.add(munro3);
-        Criteria criteria = new Criteria(Category.EITHER, null, SortOrder.ASC, SortOrder.ASC, null, null);
+        List<SortOrder> sortOrder = new LinkedList<SortOrder>();
+        sortOrder.add(SortOrder.NAMEASC);
+        sortOrder.add(SortOrder.HEIGHTASC);
+        Criteria criteria = new Criteria(Category.EITHER, null, sortOrder, null, null);
         Optional<Comparator<Munro>> comparator = criteria.buildComparator();
         assertTrue(comparator.isPresent());
 
