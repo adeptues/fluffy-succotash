@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class ApiController {
@@ -30,6 +31,14 @@ public class ApiController {
 
         if (minHeight.isPresent() && maxHeight.isPresent() && minHeight.get() > maxHeight.get()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid argument minHeight must be less than maxHeight");
+        }
+        if (sortOrder.isPresent() && sortOrder.get().size() > 2) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid argument only two sort options may be defined at a time");
+        }
+        if (sortOrder.isPresent() && sortOrder.get().size() == 2) {
+            if (sortOrder.get().stream().distinct().count() == 1) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid argument sortOrder must not contain the same value twice");
+            }
         }
         Criteria criteria = new Criteria();
         criteria.setCategory(category.orElse(Category.EITHER));
