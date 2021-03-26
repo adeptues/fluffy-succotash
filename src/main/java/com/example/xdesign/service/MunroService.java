@@ -15,10 +15,12 @@ public class MunroService {
         this.munros = munros;
     }
 
-    public List<Munro> all() {
-        return munros;
-    }
 
+    /**
+     * Search and filter based on an input criteria
+     * @param criteria the criteria to be search
+     * @return
+     */
     public List<Munro> filter(Criteria criteria) {
 
         Stream<Munro> munroStream = munros.stream().filter(criteria.buildFilters());

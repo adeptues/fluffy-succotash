@@ -33,6 +33,10 @@ public class Criteria {
         maxHeight = Optional.empty();
     }
 
+    /**
+     * Build the filters as a single predicate based off the input criteria based on the min/maxheight and the category
+     * @return A predicate to be applied to a stream
+     */
     public Predicate<Munro> buildFilters() {
         Predicate<Munro> categoryPred = null;
         Predicate<Munro> heightFilter = null;
@@ -58,6 +62,11 @@ public class Criteria {
         return categoryPred;
     }
 
+    /**
+     * Build the ordering comparators combining the comparators for secondary sorting where the primary sort is the first
+     * element in the sortOrder and the secondary sort criteria is the second element
+     * @return
+     */
     public Optional<Comparator<Munro>> buildComparator() {
         Comparator<Munro> comparator = null;
         if (this.sortOrder.isPresent()) {
@@ -77,7 +86,7 @@ public class Criteria {
         return Optional.ofNullable(comparator);
     }
 
-    public Comparator<Munro> makeComparator(SortOrder order) {
+    private  Comparator<Munro> makeComparator(SortOrder order) {
         Comparator<Munro> comparator = null;
         if (order == SortOrder.HEIGHTASC) {
             comparator = Comparator.comparing(Munro::getHeight);
