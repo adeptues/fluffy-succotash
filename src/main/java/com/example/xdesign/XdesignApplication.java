@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,9 +20,19 @@ public class XdesignApplication {
     @Bean
     public MunroService munroService() throws IOException {
         ClassPathResource classPathResource = new ClassPathResource("munrotab_v6.2.csv");
+        InputStreamReader inputStreamReader = new InputStreamReader(classPathResource.getInputStream());
+        List<String> csvLines = new LinkedList<>();
+        try {
+            try (BufferedReader br = new BufferedReader(inputStreamReader)) {
+                for (String line; (line = br.readLine()) != null; ) {
+                    // process the line.
+                    csvLines.add(line);
+                }
+            }
+        } finally {
+            inputStreamReader.close();
+        }
 
-
-        List<String> csvLines = Files.readAllLines(classPathResource.getFile().toPath());
         List<Munro> munros = new LinkedList<Munro>();
         csvLines.remove(0);
         for (String line : csvLines) {
