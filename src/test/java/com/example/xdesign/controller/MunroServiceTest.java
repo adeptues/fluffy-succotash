@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MunroServiceTest {
     private List<Munro> munros = null;
+
     @BeforeEach
     void setUp() {
         Munro munro = new Munro("Tom", 101.0f, "gridref", Category.MUN);
@@ -44,6 +45,6 @@ class MunroServiceTest {
         Criteria criteria = new Criteria(Category.EITHER, 5, sortOrder, 108f, 101f);
         MunroService munroService = new MunroService(munros);
         List<Munro> filtered = munroService.filter(criteria);
-        assertEquals(5,filtered.size());
+        assertEquals(5, filtered.size());
     }
 }

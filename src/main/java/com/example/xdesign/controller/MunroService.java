@@ -12,18 +12,18 @@ public class MunroService {
         this.munros = munros;
     }
 
-    public List<Munro> all(){
+    public List<Munro> all() {
         return munros;
     }
 
-    public List<Munro> filter(Criteria criteria){
+    public List<Munro> filter(Criteria criteria) {
 
         Stream<Munro> munroStream = munros.stream().filter(criteria.buildFilters());
 
-        if(criteria.getLimit().isPresent()){
+        if (criteria.getLimit().isPresent()) {
             munroStream = munroStream.limit(criteria.getLimit().get());
         }
-        if(criteria.buildComparator().isPresent()){
+        if (criteria.buildComparator().isPresent()) {
             return munroStream.sorted(criteria.buildComparator().get()).collect(Collectors.toList());
         }
 

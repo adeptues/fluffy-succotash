@@ -19,13 +19,13 @@ public class ApiController {
     @Autowired
     private MunroService munroService;
 
-    @RequestMapping(value = "/api/munro",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/api/munro", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Munro> munro(@RequestParam Optional<Category> category, @RequestParam Optional<Float> minHeight,
                              @RequestParam Optional<Float> maxHeight, @RequestParam Optional<Integer> limit,
-                             @RequestParam  Optional<List<SortOrder>> sortOrder){
+                             @RequestParam Optional<List<SortOrder>> sortOrder) {
 
-        if(minHeight.isPresent() && maxHeight.isPresent() && minHeight.get() > maxHeight.get()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid argument minHeight must be less than maxHeight");
+        if (minHeight.isPresent() && maxHeight.isPresent() && minHeight.get() > maxHeight.get()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid argument minHeight must be less than maxHeight");
         }
         Criteria criteria = new Criteria();
         criteria.setCategory(category.orElse(Category.EITHER));

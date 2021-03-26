@@ -6,6 +6,7 @@ import com.example.xdesign.controller.MunroService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,12 +20,10 @@ public class XdesignApplication {
 
     @Bean
     public MunroService munroService() throws IOException {
-        //load from csv
-        //intereested in name ,height ,grid reference,post 1997 hill categoryhill category,
-//5,9,13,27
-        File file = new File("/home/tom/workspace/xdesign/java-api-takehome/munrotab_v6.2.csv");
+        ClassPathResource classPathResource = new ClassPathResource("munrotab_v6.2.csv");
 
-        List<String> csvLines = Files.readAllLines(file.toPath());
+
+        List<String> csvLines = Files.readAllLines(classPathResource.getFile().toPath());
         List<Munro> munros = new LinkedList<Munro>();
         csvLines.remove(0);
         for (String line : csvLines) {

@@ -22,13 +22,7 @@ public class Criteria {
         this.maxHeight = Optional.ofNullable(maxHeight);
         this.minHeight = Optional.ofNullable(minHeight);
     }
-    public Criteria(Category category, Optional<Integer> limit, Optional<List<SortOrder>> sortOrder, Optional<Float> maxHeight, Optional<Float> minHeight) {
-        this.category = category;
-        this.limit = limit;
-        this.sortOrder = sortOrder;
-        this.maxHeight = maxHeight;
-        this.minHeight = minHeight;
-    }
+
 
     public Criteria() {
         limit = Optional.empty();
@@ -37,39 +31,39 @@ public class Criteria {
         maxHeight = Optional.empty();
     }
 
-    public Predicate<Munro> buildFilters(){
+    public Predicate<Munro> buildFilters() {
         Predicate<Munro> categoryPred = null;
         Predicate<Munro> heightFilter = null;
 
-        if(category != null && category != Category.EITHER){
+        if (category != null && category != Category.EITHER) {
             categoryPred = f -> f.getHillCategory() == category;
-        }else{
+        } else {
             categoryPred = f -> f.getHillCategory() == Category.MUN || f.getHillCategory() == Category.TOP;
         }
-        if(maxHeight.isPresent()){
+        if (maxHeight.isPresent()) {
             heightFilter = f -> f.getHeight() < maxHeight.get();
         }
         if (minHeight.isPresent()) {
             heightFilter = f -> f.getHeight() > minHeight.get();
         }
-        if(maxHeight.isPresent() && minHeight.isPresent()){
+        if (maxHeight.isPresent() && minHeight.isPresent()) {
             heightFilter = f -> f.getHeight() > minHeight.get() && f.getHeight() < maxHeight.get();
         }
 
-        if(heightFilter != null){
+        if (heightFilter != null) {
             return categoryPred.and(heightFilter);
         }
         return categoryPred;
     }
 
-    public Optional<Comparator<Munro>> buildComparator(){
+    public Optional<Comparator<Munro>> buildComparator() {
         Comparator<Munro> comparator = null;
-        if(this.sortOrder.isPresent()){
-            if(sortOrder.get().size() == 1){
+        if (this.sortOrder.isPresent()) {
+            if (sortOrder.get().size() == 1) {
                 SortOrder order = sortOrder.get().get(0);
                 comparator = makeComparator(order);
             }
-            if(sortOrder.get().size() == 2){
+            if (sortOrder.get().size() == 2) {
                 SortOrder primarySort = sortOrder.get().get(0);
                 SortOrder secondarySort = sortOrder.get().get(1);
                 Comparator<Munro> primary = makeComparator(primarySort);
@@ -81,19 +75,20 @@ public class Criteria {
         return Optional.ofNullable(comparator);
     }
 
-    public Comparator<Munro> makeComparator(SortOrder order){
+    public Comparator<Munro> makeComparator(SortOrder order) {
         Comparator<Munro> comparator = null;
-                if(order == SortOrder.HEIGHTASC){
-                    comparator = Comparator.comparing(Munro::getHeight);
-                }else if (order == SortOrder.HEIGHTDSC){
-                    comparator = Comparator.comparing(Munro::getHeight).reversed();
-                }else if(order == SortOrder.NAMEASC){
-                    comparator = Comparator.comparing(Munro::getName);
-                }else{
-                    comparator = Comparator.comparing(Munro::getName).reversed();
-                }
-                return comparator;
+        if (order == SortOrder.HEIGHTASC) {
+            comparator = Comparator.comparing(Munro::getHeight);
+        } else if (order == SortOrder.HEIGHTDSC) {
+            comparator = Comparator.comparing(Munro::getHeight).reversed();
+        } else if (order == SortOrder.NAMEASC) {
+            comparator = Comparator.comparing(Munro::getName);
+        } else {
+            comparator = Comparator.comparing(Munro::getName).reversed();
+        }
+        return comparator;
     }
+
     public Category getCategory() {
         return category;
     }
